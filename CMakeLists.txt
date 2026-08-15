@@ -3,6 +3,6 @@ project(Student_Record_Management_System)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Student_Record_Management_System main.cpp
-        student.cpp
+add_executable(Student_Record_Management_System main.c
+        student.c
         student.h)
