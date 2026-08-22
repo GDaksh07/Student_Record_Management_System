@@ -1,6 +1,8 @@
 #ifndef STUDENT_RECORD_MANAGEMENT_SYSTEM_STUDENT_H
 #define STUDENT_RECORD_MANAGEMENT_SYSTEM_STUDENT_H
 
+#include <stddef.h>
+
 #define MAX_NAME 50
 
 typedef struct {
@@ -20,5 +22,8 @@ void init_db(Database *db, size_t initialCapacity);
 void free_db(Database *db);
 int addStudent(Database *db, int id, float gpa, const char *name);
 void displayAll(Database *db);
+Student* searchById(Database *db, int id);
+Student* updateStudent(Database *db, int id, float gpa, const char *name);
+int deleteStudent(Database *db, int id);
 
 #endif //STUDENT_RECORD_MANAGEMENT_SYSTEM_STUDENT_H
