@@ -1,6 +1,7 @@
 #include <stdio.h>
-#include "student.h"
 #include <string.h>
+#include <stdlib.h>
+#include "student.h"
 
 // Helper method to read strings safely including spaces
 void readString(char *buffer, int size) {
@@ -11,6 +12,61 @@ void readString(char *buffer, int size) {
             buffer[len - 1] = '\0';
         }
     }
+}
+
+// Helper method to read integers safely
+int readInt(int *outValue) {
+    char buffer[64];
+
+    // Read raw input line from terminal
+    if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+        return 0; // Failed to read
+    }
+
+    char *endptr;
+    // strtol converts string to long int (base 10)
+    long val = strtol(buffer, &endptr, 10);
+
+    // Check if valid digits were parsed
+    if (endptr == buffer) {
+        return 0; // User typed text instead of numbers (e.g., "abc")
+    }
+
+    // Check if leftover characters exist (e.g., "12abc")
+    if (*endptr != '\n' && *endptr != '\0') {
+        return 0; // Invalid extra input
+    }
+
+    *outValue = (int)val;
+    return 1;
+}
+
+// Helper method to read floats safely
+int readFloat(float *outValue) {
+    char buffer[64];
+
+    if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+        return 0;
+    }
+
+    char *endptr;
+    float val = strtof(buffer, &endptr);
+
+    if (endptr == buffer) {
+        return 0; // No valid float found
+    }
+
+    if (*endptr != '\n' && *endptr != '\0') {
+        return 0; // Invalid trailing text
+    }
+
+    *outValue = val;
+    return 1;
+}
+
+void clearInputBuffer(void) {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 }
 
 int main() {
@@ -24,7 +80,9 @@ int main() {
 
     // Sets size for database
     printf("Set size for database: ");
-    scanf ("%d", &capacity);
+    while (!readInt(&capacity)) {
+        printf("Invalid input! Please enter a numeric capacity: ");
+    }
 
     init_db(&db, capacity); // Initializes database
 
@@ -48,7 +106,9 @@ int main() {
                "7: Create a Database\n"
                "8: Exit\n"
                "Choice: ");
-        scanf("%d", &choice);
+        while (!readInt(&choice)) {
+            printf("Invalid input! Please enter a numeric choice: ");
+        }
 
         // Checks to see if database exists
         if (choice >= 1 && choice <= 6 && db.capacity == 0) {
@@ -62,18 +122,23 @@ int main() {
         switch (choice) {
             case 1: // Adds a student to database
                 printf("Enter student id: ");
-                scanf ("%d", &id);
+                while (!readInt(&id)) {
+                    printf("Invalid input! Please enter a numeric ID: ");
+                }
                 printf("Enter student gpa: ");
-                scanf ("%f", &gpa);
+                while (!readFloat(&gpa)) {
+                    printf("Invalid input! Please enter a valid decimal GPA: ");
+                }
                 printf("Enter student name: ");
-                while (getchar() != '\n'); // Clears the newline character left in stdin by scanf
                 readString(name, MAX_NAME);
 
                 addStudent(&db, id, gpa, name);
                 break;
             case 2: // Searches for a student by id
                 printf("Enter student id: ");
-                scanf ("%d", &id);
+                while (!readInt(&id)) {
+                    printf("Invalid input! Please enter a numeric ID: ");
+                }
 
                 Student* s = searchById(&db, id);
 
@@ -88,18 +153,23 @@ int main() {
                 break;
             case 4: // Updates a students information
                 printf("Enter student id: ");
-                scanf ("%d", &id);
+                while (!readInt(&id)) {
+                    printf("Invalid input! Please enter a numeric ID: ");
+                }
                 printf("Enter student gpa: ");
-                scanf ("%f", &gpa);
+                while (!readFloat(&gpa)) {
+                    printf("Invalid input! Please enter a valid decimal GPA: ");
+                }
                 printf("Enter student name: ");
-                while (getchar() != '\n'); // Clears the newline character left in stdin by scanf
                 readString(name, MAX_NAME);
 
                 updateStudent(&db, id, gpa, name);
                 break;
             case 5: // Deletes a student from database
                 printf("Enter student id: ");
-                scanf ("%d", &id);
+                while (!readInt(&id)) {
+                    printf("Invalid input! Please enter a numeric ID: ");
+                }
 
                 deleteStudent(&db, id);
                 break;
@@ -110,7 +180,9 @@ int main() {
             case 7: // Initializes a database
                 // Sets size for database
                 printf("Set size for database: ");
-                scanf ("%d", &capacity);
+                while (!readInt(&capacity)) {
+                    printf("Invalid input! Please enter a numeric capacity: ");
+                }
 
                 init_db(&db, capacity); // Initializes database
                 printf("Database created successfully of size %d\n", capacity);
