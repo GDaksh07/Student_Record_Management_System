@@ -71,6 +71,9 @@ void clearInputBuffer(void) {
 
 int main() {
     Database db;
+    db.students = NULL;
+    db.capacity = 0;
+    db.count = 0;
 
     int capacity;
     int choice = 0;
@@ -78,13 +81,18 @@ int main() {
     float gpa;
     char name[MAX_NAME];
 
-    // Sets size for database
-    printf("Set size for database: ");
-    while (!readInt(&capacity)) {
-        printf("Invalid input! Please enter a numeric capacity: ");
-    }
+    // Attempt to load existing file first
+    if (loadDbFromFile(&db, "students.bin")) {
+        printf("Loaded existing database with %d records (Capacity: %d).\n", db.count, db.capacity);
+    } else {
+        printf("No existing database found. Let's create a new one.\n");
+        printf("Set size for database: "); // Sets size for database
+        while (!readInt(&capacity)) {
+            printf("Invalid input! Please enter a numeric capacity: ");
+        }
 
-    init_db(&db, capacity); // Initializes database
+        init_db(&db, capacity); // Initializes database
+    }
 
     // Check internal array pointer instead of struct variable
     if (db.students == NULL) {
@@ -193,6 +201,8 @@ int main() {
                 printf("Choice was not an option, please select a valid option \n\n");
                 break;
         }
+
+        saveDbToFile(&db, "students.bin");
     }
 
     free_db(&db); // Frees memory at the end of the program in the background when program ends

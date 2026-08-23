@@ -109,6 +109,7 @@ Student* updateStudent (Database *db, int id, float gpa, const char *name) {
     return result;
 }
 
+// Deletes a student from the array
 int deleteStudent (Database *db, int id) {
     if (db == NULL || db->count == 0) return 0; // checks if database is empty
 
@@ -130,5 +131,51 @@ int deleteStudent (Database *db, int id) {
     }
 
     db->count--; // count goes down by 1 for the student removal
+    return 1;
+}
+
+// Saves database into the file
+int saveDbToFile(Database *db, const char *filename) {
+    if (db == NULL || db->students == NULL) return 0;
+
+    FILE *file = fopen(filename, "wb");
+    if (file == NULL) return 0; // File opening failed
+
+    // Write the integer count and capacity first
+    fwrite(&db->count, sizeof(int), 1, file);
+    fwrite(&db->capacity, sizeof(int), 1, file);
+
+    // Save actual records
+    if (db->count > 0) {
+        fwrite(db->students, sizeof(Student), db->count, file); // Write the array of student structs
+    }
+
+    fclose(file); // Always closes the file when done
+    return 1;
+}
+
+// Loads the database file
+int loadDbFromFile(Database *db, const char *filename) {
+    if (db == NULL) return 0;
+
+    FILE *file = fopen(filename, "rb");
+    if (file == NULL) return 0; // File does not exist yet (first time running)
+
+    int count = 0, capacity = 0;
+    if (fread(&count, sizeof(int), 1, file) != 1 || fread(&capacity, sizeof(int), 1, file) != 1) {
+        fclose(file);
+        return 0; // Corrupt file or read failure
+    }
+
+    // Initialize database memory based on loaded capacity
+    init_db(db, capacity > 0 ? capacity : 4);
+
+    // Read student array directly into db->students
+    if (count > 0) {
+        fread(db->students, sizeof(Student), count, file);
+        db->count = count;
+    }
+
+    fclose(file);
     return 1;
 }

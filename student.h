@@ -25,5 +25,7 @@ void displayAll(Database *db);
 Student* searchById(Database *db, int id);
 Student* updateStudent(Database *db, int id, float gpa, const char *name);
 int deleteStudent(Database *db, int id);
+int saveDbToFile(Database *db, const char *filename);
+int loadDbFromFile(Database *db, const char *filename);
 
 #endif //STUDENT_RECORD_MANAGEMENT_SYSTEM_STUDENT_H
