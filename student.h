@@ -4,6 +4,8 @@
 #include <stddef.h>
 
 #define MAX_NAME 50
+#define BUFFER_SIZE 64
+#define DEFAULT_CAPACITY 4
 
 typedef struct {
     int id;

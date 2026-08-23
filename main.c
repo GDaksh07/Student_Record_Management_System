@@ -16,7 +16,7 @@ void readString(char *buffer, int size) {
 
 // Helper method to read integers safely
 int readInt(int *outValue) {
-    char buffer[64];
+    char buffer[BUFFER_SIZE];
 
     // Read raw input line from terminal
     if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
@@ -43,7 +43,7 @@ int readInt(int *outValue) {
 
 // Helper method to read floats safely
 int readFloat(float *outValue) {
-    char buffer[64];
+    char buffer[BUFFER_SIZE];
 
     if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
         return 0;
@@ -120,10 +120,10 @@ int main() {
 
         // Checks to see if database exists
         if (choice >= 1 && choice <= 6 && db.capacity == 0) {
-            printf("Database doesn't exist, please initialize a capacity for the database");
+            printf("Database doesn't exist, please initialize a capacity for the database\n\n");
             continue;
         } else if (choice == 7 && db.capacity != 0) {
-            printf("Database already exists");
+            printf("Database already exists\n\n");
             continue;
         }
 
@@ -151,10 +151,12 @@ int main() {
                 Student* s = searchById(&db, id);
 
                 if (s != NULL) {
-                    printf("%s has a gpa of %.2f\n", s->name, s->gpa);
+                    printf("%s, ID: %d has a gpa of %.2f\n", s->name, s->id, s->gpa);
                 } else {
                     printf("Student with ID %d not found.\n", id);
                 }
+
+                printf("\n");
                 break;
             case 3: // Displays all students in database
                 int c = 0;
@@ -194,6 +196,7 @@ int main() {
                         break;
                 }
 
+                printf("\n");
                 break;
             case 4: // Updates a students information
                 printf("Enter student id: ");
@@ -216,10 +219,11 @@ int main() {
                 }
 
                 deleteStudent(&db, id);
+                printf("\n");
                 break;
             case 6: // Frees memory
                 free_db(&db);
-                printf("Memory freed successfully");
+                printf("Memory freed successfully\n");
                 break;
             case 7: // Initializes a database
                 // Sets size for database

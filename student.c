@@ -39,7 +39,7 @@ int addStudent (Database *db, int id, float gpa, const char *name) {
     }
 
     if (db->count == db->capacity) {
-        size_t newCapacity = (db->capacity == 0) ? 4 : db->capacity * 2;
+        size_t newCapacity = (db->capacity == 0) ? DEFAULT_CAPACITY : db->capacity * 2;
 
         Student *temp = (Student *) realloc(db->students, newCapacity * sizeof(Student));
 
@@ -168,7 +168,7 @@ int loadDbFromFile(Database *db, const char *filename) {
     }
 
     // Initialize database memory based on loaded capacity
-    init_db(db, capacity > 0 ? capacity : 4);
+    init_db(db, capacity > 0 ? capacity : DEFAULT_CAPACITY);
 
     // Read student array directly into db->students
     if (count > 0) {
