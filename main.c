@@ -115,7 +115,7 @@ int main() {
                "8: Exit\n"
                "Choice: ");
         while (!readInt(&choice)) {
-            printf("Invalid input! Please enter a numeric choice: ");
+            printf("Invalid input! Please enter a valid choice: ");
         }
 
         // Checks to see if database exists
@@ -157,7 +157,43 @@ int main() {
                 }
                 break;
             case 3: // Displays all students in database
-                displayAll(&db);
+                int c = 0;
+
+                while (c < 1 || c > 5) {
+                    printf("Which type of display would you like to see?\n"
+                           "1: Sort by GPA Ascending\n"
+                           "2: Sort by GPA Descending\n"
+                           "3: Sort by Name Ascending\n"
+                           "4: Sort by Name Descending\n"
+                           "5: Just display\n"
+                           "Choice: ");
+                    while (!readInt(&c)) {
+                        printf("Invalid input! Please enter a valid choice: ");
+                    }
+                }
+
+                switch (c) {
+                    case 1:
+                        sortByGPAAscending(&db);
+                        displayAll(&db);
+                        break;
+                    case 2:
+                        sortByGPADescending(&db);
+                        displayAll(&db);
+                        break;
+                    case 3:
+                        sortByNameAscending(&db);
+                        displayAll(&db);
+                        break;
+                    case 4:
+                        sortByNameDescending(&db);
+                        displayAll(&db);
+                        break;
+                    default:
+                        displayAll(&db);
+                        break;
+                }
+
                 break;
             case 4: // Updates a students information
                 printf("Enter student id: ");

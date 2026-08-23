@@ -179,3 +179,55 @@ int loadDbFromFile(Database *db, const char *filename) {
     fclose(file);
     return 1;
 }
+
+int compareByGPAAscending(const void *a, const void *b) {
+    const Student *s1 = (const Student *)a;
+    const Student *s2 = (const Student *)b;
+
+    if (s1->gpa < s2->gpa) return -1;
+    if (s1->gpa > s2->gpa) return 1;
+    return 0;
+}
+
+int compareByGPADescending(const void *a, const void *b) {
+    const Student *s1 = (const Student *)a;
+    const Student *s2 = (const Student *)b;
+
+    if (s1->gpa < s2->gpa) return 1;
+    if (s1->gpa > s2->gpa) return -1;
+    return 0;
+}
+
+int compareByNameAscending(const void *a, const void *b) {
+    const Student *s1 = (const Student *)a;
+    const Student *s2 = (const Student *)b;
+
+    return strcmp(s1->name, s2->name);
+}
+
+int compareByNameDescending(const void *a, const void *b) {
+    const Student *s1 = (const Student *)a;
+    const Student *s2 = (const Student *)b;
+
+    return strcmp(s2->name, s1->name);
+}
+
+void sortByGPAAscending(Database *db) {
+    if (db == NULL || db->students == NULL || db->count <= 1) return;
+    qsort(db->students, db->count, sizeof(Student), compareByGPAAscending);
+}
+
+void sortByGPADescending(Database *db) {
+    if (db == NULL || db->students == NULL || db->count <= 1) return;
+    qsort(db->students, db->count, sizeof(Student), compareByGPADescending);
+}
+
+void sortByNameAscending(Database *db) {
+    if (db == NULL || db->students == NULL || db->count <= 1) return;
+    qsort(db->students, db->count, sizeof(Student), compareByNameAscending);
+}
+
+void sortByNameDescending(Database *db) {
+    if (db == NULL || db->students == NULL || db->count <= 1) return;
+    qsort(db->students, db->count, sizeof(Student), compareByNameDescending);
+}
